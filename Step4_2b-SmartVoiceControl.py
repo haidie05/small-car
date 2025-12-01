@@ -72,7 +72,7 @@ window_size = config.silero_vad.window_size
 vad = VoiceActivityDetector(config, buffer_size_in_seconds=100)
 samples_per_read = int(0.1 * sample_rate)
 
-control_url = "http://192.168.192.123:5000/control"  
+control_url = "http://172.20.10.7:5000/control"  # 修改为树莓派ip地址
 
 def send_command(text):
     try:

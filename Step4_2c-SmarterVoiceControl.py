@@ -19,7 +19,26 @@ def get_command(text: str) -> str:
         "messages": [
             {
                 "role": "user",
-                "content": f"你是一辆小车，现在你的任务是“{text}”，你可选择的动作有“前进、后退、左转、右转、无操作”，你只需要回答下一步你会做的动作即可，你的选择是："
+                "content": f"""你是小车控制模块。根据语音识别结果"{text}"，从以下5个动作中选择一个并输出：
+
+可选动作：前进、后退、左转、右转、无操作
+
+匹配规则：
+- 前进：前进、往前走、向前、直走等
+- 后退：后退、往后退、倒车、向后等
+- 左转：左转、向左转、左拐、往左等
+- 右转：右转、向右转、右拐、往右等
+- 无操作：停止、停下、或非控制指令
+
+重要：只输出动作名称，不要添加任何其他文字。如果无法确定，输出"无操作"。
+
+示例：
+"前进" → 前进
+"倒车" → 后退
+"左拐" → 左转
+"你好" → 无操作
+
+回答："""
             }
         ],
         "stream": False,
@@ -28,10 +47,10 @@ def get_command(text: str) -> str:
         "thinking_budget": 512,
         "min_p": 0.05,
         "stop": None,
-        "temperature": 0.7,
-        "top_p": 0.7,
-        "top_k": 50,
-        "frequency_penalty": 0.5,
+        "temperature": 0.2,  # 降低温度以提高输出稳定性，适合分类任务
+        "top_p": 0.3,  # 降低top_p以提高确定性
+        "top_k": 10,  # 降低top_k，只考虑最可能的选项
+        "frequency_penalty": 0.0,  # 移除频率惩罚，避免影响固定输出
         "n": 1,
         "response_format": {"type": "text"},
         "tools": [
@@ -47,7 +66,7 @@ def get_command(text: str) -> str:
         ]
     }
     headers = {
-        "Authorization": "Bearer sk-oboumgsutddcwgewajpsslapvhxlbejhjrfbcmndhmnmmxla",
+        "Authorization": "Bearer sk-diashhelzuktcatjjjvayunkrueyvchoapfhlnvdrwtsnocp",
         "Content-Type": "application/json"
     }
     try:
@@ -125,7 +144,7 @@ window_size = config.silero_vad.window_size
 vad = VoiceActivityDetector(config, buffer_size_in_seconds=100)
 samples_per_read = int(0.1 * sample_rate)
 
-control_url = "http://192.168.192.123:5000/control"  
+control_url = "http://172.20.10.7:5000/control"  
 
 def send_command(text):
     try:
