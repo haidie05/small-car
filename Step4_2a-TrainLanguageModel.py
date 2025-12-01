@@ -14,6 +14,9 @@ dataset = []
 with open('dataset.txt', encoding='utf-8') as fp:
     for line in fp:
         l = line.strip().split(' | ')
+        # 跳过格式不符合的行（需要恰好两个元素：text 和 label）
+        if len(l) < 2:
+            continue
         text = l[0]
         label = l[1]
         dataset.append({"text": text, "label": label})

@@ -66,14 +66,14 @@ window_size = config.silero_vad.window_size
 vad = VoiceActivityDetector(config, buffer_size_in_seconds=100)
 samples_per_read = int(0.1 * sample_rate)
 
-control_url = "http://192.168.192.123:5000/control"  
+control_url = "http://172.20.107.7:5000/control"  # 改成树莓派的ip地址
 
 def send_command(text):
     try:
         if '前进' == text:
             response = requests.post(control_url, json={'command': "FORWARD"})
         elif '后退' == text:
-            response = requests.post(control_url, json={'command': "STOP"})
+            response = requests.post(control_url, json={'command': "BACKWARD"})
         elif '左转' == text:
             response = requests.post(control_url, json={'command': "LEFT"})
         elif '右转' in text:
