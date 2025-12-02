@@ -5,13 +5,14 @@ import librosa
 import sounddevice as sd
 import numpy as np
 import requests
+import time
 import json
 
 
 asr_path = 'model/ASR/sherpa-onnx-paraformer-zh-small-2024-03-09'
 vad_path = 'model/VAD'
 
-def get_command(text: str) -> str:
+def get_command(text: str) -> list:
     url = "https://api.siliconflow.cn/v1/chat/completions"
 
     payload = {
@@ -19,7 +20,7 @@ def get_command(text: str) -> str:
         "messages": [
             {
                 "role": "user",
-                "content": f"""你是小车控制模块。根据语音识别结果"{text}"，从以下5个动作中选择一个并输出：
+                "content": f"""你是小车控制模块。请根据语音识别结果"{text}"，从以下动作集合中提取一个或多个**按顺序**要执行的动作，并以**JSON数组**格式返回。数组元素只能是这些动作：前进、后退、左转、右转、停止、加速、减速。每个动作的执行时间统一为5秒，返回结果不要包含其它文本或解释，只返回纯 JSON 数组，例如：["前进", "左转", "前进"]。
 
 可选动作：前进、后退、左转、右转、无操作
 
@@ -76,18 +77,31 @@ def get_command(text: str) -> str:
 
         print('大模型回复：', r_content)
         print('大模型推理过程：', r_reason)
-        command_list = ['前进', '后退', '左转', '右转', '无操作']
-        rfind_idx_list = [
-            r_content.rfind(command) for command in command_list
-        ]
-        max_idx = np.argmax(rfind_idx_list)
-        if rfind_idx_list[max_idx] == -1:
-            return '无操作'
-        command = command_list[max_idx]
+        # 尝试直接解析模型返回的 JSON 数组
+        try:
+            commands = json.loads(r_content)
+            if isinstance(commands, list):
+                # 仅保留合法命令
+                legal_commands = [c for c in commands if isinstance(c, str) and c.strip() in ['前进', '后退', '左转', '右转', '停止', '加速', '减速']]
+                return legal_commands
+        except Exception:
+            # 如果不是严格 JSON，则尝试从文本中抽取命令关键词顺序
+            commands = []
+            order_keywords = ['前进', '后退', '左转', '右转', '停止', '加速', '减速']
+            for kw in order_keywords:
+                # 按出现顺序查找，允许重复
+                start = 0
+                while True:
+                    idx = r_content.find(kw, start)
+                    if idx == -1:
+                        break
+                    commands.append(kw)
+                    start = idx + len(kw)
+            if len(commands) > 0:
+                return commands
     except Exception as e:
         print('大模型请求失败：', e)
-        command = '无操作'
-    return command
+    return []
 
 class ASR:
     def __init__(self):
@@ -146,17 +160,47 @@ samples_per_read = int(0.1 * sample_rate)
 
 control_url = "http://172.20.10.7:5000/control"  
 
+# 速度控制参数 (0 ~ 100)
+current_speed = 50
+min_speed = 0
+max_speed = 100
+speed_step = 10
+# 当前运动状态: 'STOP', 'FORWARD', 'BACKWARD', 'LEFT', 'RIGHT'
+movement_command = 'STOP'
+
 def send_command(text):
     try:
+        global current_speed, movement_command
         if '前进' == text:
-            response = requests.post(control_url, json={'command': "FORWARD"})
+            movement_command = 'FORWARD'
+            response = requests.post(control_url, json={'command': "FORWARD", 'speed': current_speed})
         elif '后退' == text:
-            response = requests.post(control_url, json={'command': "BACKWARD"})
+            movement_command = 'BACKWARD'
+            response = requests.post(control_url, json={'command': "BACKWARD", 'speed': current_speed})
         elif '左转' == text:
-            response = requests.post(control_url, json={'command': "LEFT"})
+            movement_command = 'LEFT'
+            response = requests.post(control_url, json={'command': "LEFT", 'speed': current_speed})
         elif '右转' in text:
-            response = requests.post(control_url, json={'command': "RIGHT"})
+            movement_command = 'RIGHT'
+            response = requests.post(control_url, json={'command': "RIGHT", 'speed': current_speed})
+        elif '加速' in text or '快一点' in text or '快点' in text or '提速' in text:
+            prev_speed = current_speed
+            current_speed = min(max_speed, current_speed + speed_step)
+            print(f'速度提升: {prev_speed} -> {current_speed}')
+            if movement_command in ['FORWARD', 'BACKWARD', 'LEFT', 'RIGHT']:
+                response = requests.post(control_url, json={'command': movement_command, 'speed': current_speed})
+            else:
+                response = requests.post(control_url, json={'command': "SET_SPEED", 'speed': current_speed})
+        elif '减速' in text or '慢一点' in text or '慢点' in text or '放慢' in text:
+            prev_speed = current_speed
+            current_speed = max(min_speed, current_speed - speed_step)
+            print(f'速度下降: {prev_speed} -> {current_speed}')
+            if movement_command in ['FORWARD', 'BACKWARD', 'LEFT', 'RIGHT']:
+                response = requests.post(control_url, json={'command': movement_command, 'speed': current_speed})
+            else:
+                response = requests.post(control_url, json={'command': "SET_SPEED", 'speed': current_speed})
         else:
+            movement_command = 'STOP'
             response = requests.post(control_url, json={'command': "STOP"})
 
         if response.status_code != 200:
@@ -185,12 +229,19 @@ try:
                 if len(text):
                     print()
                     print(f'第{idx}句：{text}')
-                    command = get_command(text)
-                    if command == '无操作':
+                    commands = get_command(text)
+                    if len(commands) == 0:
                         print('未识别到小车指令')
                     else:
-                        print('识别到小车指令：', command)
-                        send_command(command)
+                        print('识别到小车指令序列：', commands)
+                        # 依次执行每个命令，每个命令执行 5s
+                        for cmd in commands:
+                            print('执行指令：', cmd)
+                            send_command(cmd)
+                            # 保持 5 秒
+                            time.sleep(5)
+                        # 执行序列完毕后发送停止命令
+                        send_command('停止')
                     idx += 1
 except KeyboardInterrupt:
     sd.stop()

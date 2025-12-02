@@ -1,0 +1,134 @@
+{"input": "小车向前走", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "向后退", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "左转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "右转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "加速", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "减速", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "前进快一点", "output": "{'command': 'FORWARD', 'speed': 70}"}
+{"input": "后退慢一点", "output": "{'command': 'BACKWARD', 'speed': 30}"}
+{"input": "停下", "output": "{'command': 'STOP'}"}
+{"input": "原地右转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "往前走快点", "output": "{'command': 'FORWARD', 'speed': 80}"}
+{"input": "往后退慢点", "output": "{'command': 'BACKWARD', 'speed': 20}"}
+{"input": "向左转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "提高速度", "output": "{'command': 'SET_SPEED', 'speed': 80}"}
+{"input": "降低速度", "output": "{'command': 'SET_SPEED', 'speed': 20}"}
+{"input": "前进", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "往前走", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "向前走", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "往前开", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "向前开", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "直走", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "向前行驶", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "后退", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "向后退", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "往后走", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "向后走", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "倒车", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "向后行驶", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "左转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "向左转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "往左转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "左转弯", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "向左拐", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "左拐", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "右转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "向右转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "往右转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "右转弯", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "向右拐", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "右拐", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "加速", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "加快速度", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "提高速度", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "提速", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "快点", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "快一点", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "再快点", "output": "{'command': 'SET_SPEED', 'speed': 70}"}
+{"input": "减速", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "减慢速度", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "降低速度", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "降速", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "慢点", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "慢一点", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "再慢点", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "放慢", "output": "{'command': 'SET_SPEED', 'speed': 30}"}
+{"input": "停下", "output": "{'command': 'STOP'}"}
+{"input": "停止", "output": "{'command': 'STOP'}"}
+{"input": "停下来", "output": "{'command': 'STOP'}"}
+{"input": "停住", "output": "{'command': 'STOP'}"}
+{"input": "停车", "output": "{'command': 'STOP'}"}
+{"input": "前进快一点", "output": "{'command': 'FORWARD', 'speed': 70}"}
+{"input": "往前走快点", "output": "{'command': 'FORWARD', 'speed': 70}"}
+{"input": "向前行驶快一些", "output": "{'command': 'FORWARD', 'speed': 70}"}
+{"input": "快速前进", "output": "{'command': 'FORWARD', 'speed': 80}"}
+{"input": "快速向前", "output": "{'command': 'FORWARD', 'speed': 80}"}
+{"input": "高速前进", "output": "{'command': 'FORWARD', 'speed': 80}"}
+{"input": "前进慢一点", "output": "{'command': 'FORWARD', 'speed': 30}"}
+{"input": "往前走慢点", "output": "{'command': 'FORWARD', 'speed': 30}"}
+{"input": "慢速前进", "output": "{'command': 'FORWARD', 'speed': 20}"}
+{"input": "缓慢前进", "output": "{'command': 'FORWARD', 'speed': 20}"}
+{"input": "后退快一点", "output": "{'command': 'BACKWARD', 'speed': 70}"}
+{"input": "向后退快点", "output": "{'command': 'BACKWARD', 'speed': 70}"}
+{"input": "快速后退", "output": "{'command': 'BACKWARD', 'speed': 80}"}
+{"input": "高速后退", "output": "{'command': 'BACKWARD', 'speed': 80}"}
+{"input": "后退慢一点", "output": "{'command': 'BACKWARD', 'speed': 30}"}
+{"input": "向后退慢点", "output": "{'command': 'BACKWARD', 'speed': 30}"}
+{"input": "慢速后退", "output": "{'command': 'BACKWARD', 'speed': 20}"}
+{"input": "缓慢后退", "output": "{'command': 'BACKWARD', 'speed': 20}"}
+{"input": "左转快一点", "output": "{'command': 'LEFT', 'speed': 70}"}
+{"input": "向左转快点", "output": "{'command': 'LEFT', 'speed': 70}"}
+{"input": "快速左转", "output": "{'command': 'LEFT', 'speed': 80}"}
+{"input": "左转慢一点", "output": "{'command': 'LEFT', 'speed': 30}"}
+{"input": "向左转慢点", "output": "{'command': 'LEFT', 'speed': 30}"}
+{"input": "慢速左转", "output": "{'command': 'LEFT', 'speed': 20}"}
+{"input": "右转快一点", "output": "{'command': 'RIGHT', 'speed': 70}"}
+{"input": "向右转快点", "output": "{'command': 'RIGHT', 'speed': 70}"}
+{"input": "快速右转", "output": "{'command': 'RIGHT', 'speed': 80}"}
+{"input": "右转慢一点", "output": "{'command': 'RIGHT', 'speed': 30}"}
+{"input": "向右转慢点", "output": "{'command': 'RIGHT', 'speed': 30}"}
+{"input": "慢速右转", "output": "{'command': 'RIGHT', 'speed': 20}"}
+{"input": "原地左转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "原地向右转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "加速前进", "output": "{'command': 'FORWARD', 'speed': 80}"}
+{"input": "加速向前", "output": "{'command': 'FORWARD', 'speed': 80}"}
+{"input": "减速前进", "output": "{'command': 'FORWARD', 'speed': 20}"}
+{"input": "慢速向前", "output": "{'command': 'FORWARD', 'speed': 20}"}
+{"input": "加速后退", "output": "{'command': 'BACKWARD', 'speed': 80}"}
+{"input": "快速向后", "output": "{'command': 'BACKWARD', 'speed': 80}"}
+{"input": "减速后退", "output": "{'command': 'BACKWARD', 'speed': 20}"}
+{"input": "慢速向后", "output": "{'command': 'BACKWARD', 'speed': 20}"}
+{"input": "以中等速度前进", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "以中等速度后退", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "以中等速度左转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "以中等速度右转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "全速前进", "output": "{'command': 'FORWARD', 'speed': 100}"}
+{"input": "全速后退", "output": "{'command': 'BACKWARD', 'speed': 100}"}
+{"input": "全速左转", "output": "{'command': 'LEFT', 'speed': 100}"}
+{"input": "全速右转", "output": "{'command': 'RIGHT', 'speed': 100}"}
+{"input": "慢速左转弯", "output": "{'command': 'LEFT', 'speed': 20}"}
+{"input": "快速右转弯", "output": "{'command': 'RIGHT', 'speed': 80}"}
+{"input": "缓慢左转", "output": "{'command': 'LEFT', 'speed': 20}"}
+{"input": "快速右转", "output": "{'command': 'RIGHT', 'speed': 80}"}
+{"input": "最快速度前进", "output": "{'command': 'FORWARD', 'speed': 100}"}
+{"input": "最快速度后退", "output": "{'command': 'BACKWARD', 'speed': 100}"}
+{"input": "最慢速度前进", "output": "{'command': 'FORWARD', 'speed': 10}"}
+{"input": "最慢速度后退", "output": "{'command': 'BACKWARD', 'speed': 10}"}
+{"input": "以一半速度前进", "output": "{'command': 'FORWARD', 'speed': 25}"}
+{"input": "以一半速度后退", "output": "{'command': 'BACKWARD', 'speed': 25}"}
+{"input": "以三分之一速度前进", "output": "{'command': 'FORWARD', 'speed': 33}"}
+{"input": "以四分之三速度前进", "output": "{'command': 'FORWARD', 'speed': 75}"}
+{"input": "往正前方走", "output": "{'command': 'FORWARD', 'speed': 50}"}
+{"input": "朝正后方退", "output": "{'command': 'BACKWARD', 'speed': 50}"}
+{"input": "向正左方转", "output": "{'command': 'LEFT', 'speed': 50}"}
+{"input": "向正右方转", "output": "{'command': 'RIGHT', 'speed': 50}"}
+{"input": "前进然后停下", "output": "[{'command': 'FORWARD', 'speed': 50, 'duration': 300}, {'command': 'STOP', 'duration': 0}]"}
+{"input": "先前进再左转", "output": "[{'command': 'FORWARD', 'speed': 50, 'duration': 300}, {'command': 'LEFT', 'speed': 50, 'duration': 300}]"}
+{"input": "先左转再右转", "output": "[{'command': 'LEFT', 'speed': 50, 'duration': 300}, {'command': 'RIGHT', 'speed': 50, 'duration': 300}]"}
+{"input": "前进五分钟后停下", "output": "[{'command': 'FORWARD', 'speed': 50, 'duration': 300}, {'command': 'STOP', 'duration': 0}]"}
+{"input": "先加速前进，然后减速后退", "output": "[{'command': 'FORWARD', 'speed': 80, 'duration': 300}, {'command': 'BACKWARD', 'speed': 20, 'duration': 300}]"}
+{"input": "前进五分钟后右转五分钟", "output": "[{'command': 'FORWARD', 'speed': 50, 'duration': 300}, {'command': 'RIGHT', 'speed': 50, 'duration': 300}]"}
+{"input": "先左转五分钟，然后前进五分钟", "output": "[{'command': 'LEFT', 'speed': 50, 'duration': 300}, {'command': 'FORWARD', 'speed': 50, 'duration': 300}]"}
+{"input": "快速前进五分钟然后停下", "output": "[{'command': 'FORWARD', 'speed': 80, 'duration': 300}, {'command': 'STOP', 'duration': 0}]"}
+{"input": "慢速后退五分钟然后停止", "output": "[{'command': 'BACKWARD', 'speed': 20, 'duration': 300}, {'command': 'STOP', 'duration': 0}]"}
+{"input": "先前进，再左转，然后停下", "output": "[{'command': 'FORWARD', 'speed': 50, 'duration': 300}, {'command': 'LEFT', 'speed': 50, 'duration': 300}, {'command': 'STOP', 'duration': 0}]"}
