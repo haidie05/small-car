@@ -1,7 +1,6 @@
 import json, random, itertools, os
 
 actions = ['前进','后退','左转','右转']
-speeds  = ['加速','减速','快一点','慢一点','提速','放慢']
 templates_single = [
     "{verb}","小车{verb}","请{verb}","现在{verb}吧","马上{verb}"
 ]
@@ -33,16 +32,9 @@ templates_seq_by_len = {
 def mk_single():
     a = random.choice(actions)
     t = random.choice(templates_single)
-    if random.random() < 0.4:  # 40% include speed change
-        s = random.choice(speeds)
-        sent = t.format(verb=a + s)
-        spd = 70 if s in ['加速', '快一点', '提速'] else 30
-        cmd = 'FORWARD' if a == '前进' else ('BACKWARD' if a == '后退' else ('LEFT' if a == '左转' else 'RIGHT'))
-        assistant_out = json.dumps({'command': cmd, 'speed': spd}, ensure_ascii=False)
-    else:
-        sent = t.format(verb=a)
-        cmd = 'FORWARD' if a == '前进' else ('BACKWARD' if a == '后退' else ('LEFT' if a == '左转' else 'RIGHT'))
-        assistant_out = json.dumps({'command': cmd, 'speed': 50}, ensure_ascii=False)
+    sent = t.format(verb=a)
+    # 输出格式改为 JSON 数组
+    assistant_out = json.dumps([a], ensure_ascii=False)
 
     # Optionally add a system instruction (10% chance)
     messages = []
@@ -69,38 +61,43 @@ def mk_seq(n=3):
     else:
         tmpl = random.choice(tmpl_list)
         sent = tmpl.format(*acts)
-    outs = []
-    for a in acts:
-        outs.append({'command': ('FORWARD' if a == '前进' else ('BACKWARD' if a == '后退' else ('LEFT' if a == '左转' else 'RIGHT'))), 'speed': 50})
-
-    assistant_out = json.dumps(outs, ensure_ascii=False)
+    
+    # 输出格式改为简单的 JSON 数组，如 ["前进", "左转"]
+    assistant_out = json.dumps(acts, ensure_ascii=False)
     messages = []
     if random.random() < 0.1:
         messages.append({
             'role': 'system',
-            'content': '你是小车控制指令的解析模块。请输出 JSON 数组，元素为动作对象，数组顺序代表执行顺序。'
+            'content': '你是小车控制指令的解析模块。请输出 JSON 数组，数组元素为动作名称，数组顺序代表执行顺序。'
         })
     messages.append({'role': 'user', 'content': sent})
     messages.append({'role': 'assistant', 'content': assistant_out})
     return {'messages': messages}
 
-# 生成 400 单条
-single = [mk_single() for _ in range(400)]
-# 生成 1000 条序列
-seq2 = [mk_seq(2) for _ in range(200)]
-seq3 = [mk_seq(3) for _ in range(500)]
-seq4 = [mk_seq(4) for _ in range(200)]
-seq5 = [mk_seq(5) for _ in range(100)]
-# 兜底
+# 生成数据，总计3000条
+# 单条命令：800条
+single = [mk_single() for _ in range(800)]
+# 序列命令：2150条
+seq2 = [mk_seq(2) for _ in range(600)]   # 2个动作的序列
+seq3 = [mk_seq(3) for _ in range(850)]    # 3个动作的序列
+seq4 = [mk_seq(4) for _ in range(500)]    # 4个动作的序列
+seq5 = [mk_seq(5) for _ in range(200)]    # 5个动作的序列
+# 停止命令：50条
 stop = []
-for w in ["停", "停下", "停止", "急停", "别动了"]:
-    assistant_out = json.dumps({'command': 'STOP', 'speed': 0}, ensure_ascii=False)
+stop_words = ["停", "停下", "停止", "急停", "别动了", "停止运动", "停下来", "不要动了", "暂停", "停止前进",
+              "停一下", "先停", "立即停止", "马上停", "快停", "停止运行", "停止移动", "停止操作", "停止前进",
+              "停止后退", "停止左转", "停止右转", "停止所有动作", "停止一切", "停止执行", "停止工作",
+              "停止运行", "停止移动", "停止前进", "停止后退", "停止左转", "停止右转", "停止所有动作",
+              "停止一切", "停止执行", "停止工作", "停止运行", "停止移动", "停止前进", "停止后退",
+              "停止左转", "停止右转", "停止所有动作", "停止一切", "停止执行", "停止工作"]
+for w in stop_words[:50]:  # 取前50个
+    assistant_out = json.dumps(["停止"], ensure_ascii=False)
     messages = [{'role': 'user', 'content': w}, {'role': 'assistant', 'content': assistant_out}]
     stop.append({'messages': messages})
 
 all_data = single + seq2 + seq3 + seq4 + seq5 + stop
 random.shuffle(all_data)
-out_path = os.path.join(os.path.dirname(__file__), 'raspberry_car_1500.jsonl')
+out_path = os.path.join(os.path.dirname(__file__), 'raspberry_car_3000.jsonl')
 with open(out_path, 'w', encoding='utf-8') as f:
     for d in all_data:
         f.write(json.dumps(d,ensure_ascii=False)+'\n')

@@ -71,11 +71,18 @@ def get_command(text: str) -> str:
     }
     try:
         response = requests.request("POST", url, json=payload, headers=headers)
-        r_content = json.loads(response.text)['choices'][0]['message']['content'].strip()
-        r_reason = json.loads(response.text)['choices'][0]['message']['reasoning_content'].strip()
+        response.raise_for_status()  # 检查HTTP状态码
+        response_data = json.loads(response.text)
+        r_content = response_data['choices'][0]['message']['content'].strip()
+        
+        # 只有当 enable_thinking 为 True 时才尝试获取推理过程
+        r_reason = None
+        if 'reasoning_content' in response_data['choices'][0]['message']:
+            r_reason = response_data['choices'][0]['message']['reasoning_content'].strip()
 
         print('大模型回复：', r_content)
-        print('大模型推理过程：', r_reason)
+        if r_reason:
+            print('大模型推理过程：', r_reason)
         command_list = ['前进', '后退', '左转', '右转', '无操作']
         rfind_idx_list = [
             r_content.rfind(command) for command in command_list
@@ -84,8 +91,23 @@ def get_command(text: str) -> str:
         if rfind_idx_list[max_idx] == -1:
             return '无操作'
         command = command_list[max_idx]
+    except requests.exceptions.RequestException as e:
+        print('大模型请求失败（网络错误）：', e)
+        if hasattr(e, 'response') and e.response is not None:
+            print('响应状态码：', e.response.status_code)
+            print('响应内容：', e.response.text[:500])  # 只打印前500个字符
+        command = '无操作'
+    except KeyError as e:
+        print('大模型请求失败（响应格式错误）：', e)
+        print('响应内容：', response.text[:500] if 'response' in locals() else '无响应')
+        command = '无操作'
+    except json.JSONDecodeError as e:
+        print('大模型请求失败（JSON解析错误）：', e)
+        print('响应内容：', response.text[:500] if 'response' in locals() else '无响应')
+        command = '无操作'
     except Exception as e:
-        print('大模型请求失败：', e)
+        print('大模型请求失败（未知错误）：', e)
+        print('错误类型：', type(e).__name__)
         command = '无操作'
     return command
 
@@ -187,7 +209,8 @@ try:
                     print(f'第{idx}句：{text}')
                     command = get_command(text)
                     if command == '无操作':
-                        print('未识别到小车指令')
+                        print('未识别到小车指令，发送停止命令')
+                        send_command('停止')
                     else:
                         print('识别到小车指令：', command)
                         send_command(command)

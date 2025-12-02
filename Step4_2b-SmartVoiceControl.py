@@ -76,14 +76,16 @@ control_url = "http://172.20.10.7:5000/control"  # 修改为树莓派ip地址
 
 def send_command(text):
     try:
-        if '前进' == text:
+        if '前进' in text:
             response = requests.post(control_url, json={'command': "FORWARD"})
-        elif '后退' == text:
-            response = requests.post(control_url, json={'command': "STOP"})
-        elif '左转' == text:
+        elif '后退' in text:
+            response = requests.post(control_url, json={'command': "BACKWARD"})
+        elif '左转' in text:
             response = requests.post(control_url, json={'command': "LEFT"})
         elif '右转' in text:
             response = requests.post(control_url, json={'command': "RIGHT"})
+        elif '停止' in text:
+            response = requests.post(control_url, json={'command': "STOP"})
         else:
             response = requests.post(control_url, json={'command': "STOP"})
 
@@ -116,7 +118,8 @@ try:
                     lm.encode(text)
                     command = mlp.predict(lm.encode(text).reshape(1, -1))[0]
                     if command == '无操作':
-                        print('未识别到小车指令')
+                        print('未识别到小车指令，发送停止命令')
+                        send_command('停止')
                     else:
                         print('识别到小车指令：', command)
                         send_command(command)
